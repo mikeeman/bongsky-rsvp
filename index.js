@@ -265,13 +265,7 @@ exports.handler = (event, context, callback) => {
                 //write new entry for now
                 var options = {
                     uri: 'https://www.aisleplanner.com',
-                    //qs: {
-                    //    access_token: 'xxxxx xxxxx' // -> uri + '?access_token=xxxxx%20xxxxx'
-                    //},
-                    //headers: {
-                    //    'User-Agent': 'Request-Promise'
-                    //},
-                    json: true, // Automatically parses the JSON string in the response
+                    json: true, 
                     simple: false,
                     resolveWithFullResponse: true 
                 };
