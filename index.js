@@ -54,7 +54,7 @@ exports.handler = (event, context, callback) => {
                 //console.log('Guests: %j', guests);
                 //check if more than 1 guest
                 if(guests.indexOf(',') >= 0){
-                    console.log('Getting info for Guest1');
+                    //console.log('Getting info for Guest1');
                     var guest1FullName = guests.substr(0,guests.indexOf(',')).trim();
                     var guest1FirstName = guest1FullName.substr(0,guest1FullName.indexOf(' '));
                     var guest1LastName = guest1FullName.substr(guest1FullName.indexOf(' ')+1);
@@ -62,7 +62,7 @@ exports.handler = (event, context, callback) => {
                     var remainingGuestList1 = guests.substr(guests.indexOf(',')+1).trim();
                     if(remainingGuestList1.indexOf(',') >= 0){
                         //get 2nd guest info
-                        console.log('Getting info for Guest2');
+                        //console.log('Getting info for Guest2');
                         var guest2FullName = remainingGuestList1.substr(0,remainingGuestList1.indexOf(',')).trim();
                         var guest2FirstName = guest2FullName.substr(0,guest2FullName.indexOf(' '));
                         var guest2LastName = guest2FullName.substr(guest2FullName.indexOf(' ')+1);
@@ -70,7 +70,7 @@ exports.handler = (event, context, callback) => {
                         var remainingGuestList2 = remainingGuestList1.substr(remainingGuestList1.indexOf(',')+1).trim();
                         if(remainingGuestList2.indexOf(',') >= 0){
                             //get 3rd guest info
-                            console.log('Getting info for Guest3');
+                            //console.log('Getting info for Guest3');
                             var guest3FullName = remainingGuestList2.substr(0,remainingGuestList2.indexOf(',')).trim();
                             var guest3FirstName = guest3FullName.substr(0,guest3FullName.indexOf(' '));
                             var guest3LastName = guest3FullName.substr(guest3FullName.indexOf(' ')+1);
@@ -78,44 +78,52 @@ exports.handler = (event, context, callback) => {
                             var remainingGuestList3 = remainingGuestList2.substr(remainingGuestList2.indexOf(',')+1).trim();
                             if(remainingGuestList3.indexOf(',') >= 0){
                                 //get 4th guest info
-                                console.log('Getting info for Guest4');
+                                //console.log('Getting info for Guest4');
                                 console.log('WARNING: more than 4 guests found, dropping others');
                                 var guest4FullName = remainingGuestList3.substr(0,remainingGuestList3.indexOf(',')).trim();
                                 var guest4FirstName = guest4FullName.substr(0,guest4FullName.indexOf(' '));
                                 var guest4LastName = guest4FullName.substr(guest4FullName.indexOf(' ')+1);
+                                var numGuests = 4;
                             } else {
                                 //only 4 guests (not allowing more)
-                                console.log('Found 4 guests');
+                                //console.log('Found 4 guests');
                                 var guest4FullName = remainingGuestList3.substr(remainingGuestList3.indexOf(',')+1).trim();
                                 var guest4FirstName = guest4FullName.substr(0,guest4FullName.indexOf(' '));
                                 var guest4LastName = guest4FullName.substr(guest4FullName.indexOf(' ')+1);
+                                var numGuests = 4;
                             }//only 4 guests
                         } else {
                             //only 3 guests
-                            console.log('Found 3 guests');
+                            //console.log('Found 3 guests');
                             var guest3FullName = remainingGuestList2.substr(remainingGuestList2.indexOf(',')+1).trim();
                             var guest3FirstName = guest3FullName.substr(0,guest3FullName.indexOf(' '));
                             var guest3LastName = guest3FullName.substr(guest3FullName.indexOf(' ')+1);
+                            var numGuests = 3;
                         }//only 3 guests
                     } else {
                         //only 2 guests
-                        console.log('Found 2 guests');
+                        //console.log('Found 2 guests');
                         var guest2FullName = remainingGuestList1.substr(remainingGuestList1.indexOf(',')+1).trim();
                         var guest2FirstName = guest2FullName.substr(0,guest2FullName.indexOf(' '));
                         var guest2LastName = guest2FullName.substr(guest2FullName.indexOf(' ')+1);
-                        
+                        var numGuests = 2;
                     }//only 2 guests
                     
                 } else {
                     //only 1 guest
-                    console.log('Found 1 guest');
+                    //console.log('Found 1 guest');
                     var guest1FullName = guests.substr(guests.indexOf(',')+1).trim();
                     var guest1FirstName = guest1FullName.substr(0,guest1FullName.indexOf(' '));
                     var guest1LastName = guest1FullName.substr(guest1FullName.indexOf(' ')+1);
+                    var numGuests = 1;
                 }//only 1 guest
-            }//if any guests
+            } else {
+                //no additional guests
+                //console.log('Found 0 additional guests');
+                var numGuests = 0;
+            }
         }//if has NewImage
-        if(record.dynamodb.hasOwnProperty('OldImage')){
+        /*if(record.dynamodb.hasOwnProperty('OldImage')){
             //console.log('======OLD INFO======');
             var oldName = record.dynamodb.OldImage.name.S;
             var oldFullName = oldName.trim();
@@ -202,7 +210,8 @@ exports.handler = (event, context, callback) => {
                 }//only 1 guest
             }//if any guests
         }//if has OldImage
-        
+        */
+
         switch(record.eventName) {
             case "INSERT":
                 // Adding a net new entry
@@ -210,6 +219,7 @@ exports.handler = (event, context, callback) => {
                 //     FirstName
                 //     LastName
                 //     Response
+                /*
                 console.log("INSERT TO AISLEPLANNER");
                 console.log('======NEW INFO======');
                 if (typeof email !== 'undefined') {
@@ -233,7 +243,8 @@ exports.handler = (event, context, callback) => {
                 if (typeof guest4FullName !== 'undefined') {
                     console.log("new guest4FullName: %j, guest4FirstName: %j, guest4LastName: %j", guest4FullName, guest4FirstName, guest4LastName);
                 }
-                console.log('======OLD INFO======');
+                */
+                /*console.log('======OLD INFO======');
                 if (typeof oldEmail !== 'undefined') {
                     console.log("old Email: %j", oldEmail);
                 }
@@ -255,6 +266,7 @@ exports.handler = (event, context, callback) => {
                 if (typeof oldGuest4FullName !== 'undefined') {
                     console.log("old guest4FullName: %j, guest4FirstName: %j, guest4LastName: %j", oldGuest4FullName, oldGuest4FirstName, oldGuest4LastName);
                 }
+                */
                 
                 //for each new user + guests
                 //  if exists && attending != oldAttending
@@ -272,17 +284,17 @@ exports.handler = (event, context, callback) => {
 
                 rp(options)
                     .then(function (response) {
-                        console.log('Response: %j', response);
+                        //console.log('Response: %j', response);
                         var rawcookies = response.headers['set-cookie'];
                         for (var i in rawcookies) {
                             var cookie = new Cookie(rawcookies[i]);
                             switch(cookie.key) {
                                 case "XSRF-TOKEN":
-                                    console.log("Found XSRF-TOKEN: %j, expires: %j", cookie.value, cookie.expires);
+                                    //console.log("Found XSRF-TOKEN: %j, expires: %j", cookie.value, cookie.expires);
                                     token = cookie.value;
                                     break;
                                 case "session":
-                                    console.log("Found session: %j, expires: %j", cookie.value, cookie.expires);
+                                    //console.log("Found session: %j, expires: %j", cookie.value, cookie.expires);
                                     session = cookie.value;
                                     break;
                                 default:
@@ -349,8 +361,8 @@ exports.handler = (event, context, callback) => {
 
                         rp(signinOptions)
                             .then(function (signinOptions) {
-                                console.log("signin successful!");
-                                console.log("adding guest first name: %j last name: %j", firstName, lastName);
+                                //console.log("signin successful!");
+                                //console.log("adding guest first name: %j last name: %j", firstName, lastName);
                                 //add guest
                                 var addPrimaryOptions = {
                                     method: 'POST',
@@ -380,11 +392,11 @@ exports.handler = (event, context, callback) => {
                                 rp(addPrimaryOptions)
                                     .then(function (addPrimaryBody) {
                                         console.log("guest %j %j was added successfully!", firstName, lastName);
-                                        console.log("addPrimaryBody: %j", addPrimaryBody);
+                                        //console.log("addPrimaryBody: %j", addPrimaryBody);
                                         var guestId = addPrimaryBody.guests[0].id;
-                                        console.log("%j %j has user id: %j", firstName, lastName, guestId);
+                                        //console.log("%j %j has user id: %j", firstName, lastName, guestId);
                                         // set attending rsvp status for bongsky
-                                        console.log("setting rsvp status %s %s is: %j", firstName, lastName, attending);
+                                        //console.log("setting rsvp status %s %s is: %j", firstName, lastName, attending);
                                         var aisleplannerPrimaryAttending = (attending == "1") ? "attending" : "declined";
                                         var updatePrimaryAttendingOptions = {
                                             method: 'PUT',
@@ -422,9 +434,9 @@ exports.handler = (event, context, callback) => {
                                         rp(updatePrimaryAttendingOptions)
                                             .then(function (updatePrimaryAttendingBody) {
                                                 console.log("guest %j %j rsvp status was added successfully!", firstName, lastName);
-                                                console.log("updatePrimaryAttendingBody: %j", updatePrimaryAttendingBody);
+                                                //console.log("updatePrimaryAttendingBody: %j", updatePrimaryAttendingBody);
                                                 // set attending status for Claudia Cole
-                                                console.log("repeat setting rsvp status %j %j is: %j", firstName, lastName, attending);
+                                                //console.log("repeat setting rsvp status %j %j is: %j", firstName, lastName, attending);
                                                 var updatePrimaryAttendingRepeatOptions = {
                                                     method: 'PUT',
                                                     uri: 'https://www.aisleplanner.com/api/wedding/60620/events/266430/guests/' + guestId,
@@ -461,38 +473,638 @@ exports.handler = (event, context, callback) => {
                                                 rp(updatePrimaryAttendingRepeatOptions)
                                                     .then(function (updatePrimaryAttendingRepeatBody) {
                                                         console.log("guest %j %j rsvp status was added successfully again!", firstName, lastName);
-                                                        console.log("updatePrimaryAttendingRepeatBody: %j", updatePrimaryAttendingRepeatBody);
-                                                        console.log("GREAT SUCCESS!");
-                                                        console.log("Time to add guests... TODO");
-                                                        //signout
-                                                        console.log("signing out...");
-                                
-                                                        var signoutOptions = {
-                                                            uri: 'https://www.aisleplanner.com/signout',
-                                                            headers: {
-                                                                'Host': 'www.aisleplanner.com',
-                                                                'Connection': 'keep-alive',
-                                                                'Upgrade-Insecure-Requests': '1',
-                                                                'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8',
-                                                                'X-XSRF-TOKEN': token,
-                                                                'X-Requested-With': 'XMLHttpRequest',
-                                                                'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/64.0.3282.186 Safari/537.36',
-                                                                'Referer': 'https://www.aisleplanner.com/app/project/60620/tools/guests/event/266429',
-                                                                'Accept-Encoding': 'gzip, deflate, br',
-                                                                'Accept-Language': 'en-CA,en-GB;q=0.9,en-US;q=0.8,en;q=0.7'
-                                                            },
-                                                            jar: cookiejar,
-                                                            json: true // Automatically stringifies the body to JSON
-                                                        };
+                                                        //console.log("updatePrimaryAttendingRepeatBody: %j", updatePrimaryAttendingRepeatBody);
+                                                        //console.log("GREAT SUCCESS!");
+                                                        //console.log("Time to add guests...");
+                                                        if(numGuests <= 0) {
+                                                            //console.log("no additional guests, signing out...");
+                                                            //signout
+                                                            console.log("signing out...");
+            
+                                                            var signoutOptions = {
+                                                                uri: 'https://www.aisleplanner.com/signout',
+                                                                headers: {
+                                                                    'Host': 'www.aisleplanner.com',
+                                                                    'Connection': 'keep-alive',
+                                                                    'Upgrade-Insecure-Requests': '1',
+                                                                    'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8',
+                                                                    'X-XSRF-TOKEN': token,
+                                                                    'X-Requested-With': 'XMLHttpRequest',
+                                                                    'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/64.0.3282.186 Safari/537.36',
+                                                                    'Referer': 'https://www.aisleplanner.com/app/project/60620/tools/guests/event/266429',
+                                                                    'Accept-Encoding': 'gzip, deflate, br',
+                                                                    'Accept-Language': 'en-CA,en-GB;q=0.9,en-US;q=0.8,en;q=0.7'
+                                                                },
+                                                                jar: cookiejar,
+                                                                json: true // Automatically stringifies the body to JSON
+                                                            };
 
-                                                        rp(signoutOptions)
-                                                            .then(function (signoutBody) {
-                                                                console.log("signout succeeded!");
-                                                                //END
-                                                            })
-                                                            .catch(function (signoutErr) {
-                                                                console.log("signout failed! error: %j", signoutErr);
-                                                            });
+                                                            rp(signoutOptions)
+                                                                .then(function (signoutBody) {
+                                                                    console.log("signout succeeded!");
+                                                                    //END
+                                                                })
+                                                                .catch(function (signoutErr) {
+                                                                    console.log("signout failed! error: %j", signoutErr);
+                                                                });
+                                                        } else {
+                                                            console.log("adding guest first name: %j last name: %j", guest1FirstName, guest1LastName);
+                                                            //add guest
+                                                            var addGuest1Options = {
+                                                                method: 'POST',
+                                                                uri: 'https://www.aisleplanner.com/api/wedding/60620/guest_groups?guests=true',
+                                                                body: {
+                                                                    group: {},
+                                                                    guests: [{"first_name":guest1FirstName,"last_name":guest1LastName,"is_primary_guest":true,"group_order":0}],"events":["266429","266430"]
+                                                                },
+                                                                headers: {
+                                                                    'Host': 'www.aisleplanner.com',
+                                                                    'Connection': 'keep-alive',
+                                                                    'Origin': 'https://www.aisleplanner.com',
+                                                                    'X-XSRF-TOKEN': token,
+                                                                    //'X-AP-API-Version': todayDate,
+                                                                    'X-Requested-With': 'XMLHttpRequest',
+                                                                    'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/64.0.3282.186 Safari/537.36',
+                                                                    'Content-Type': 'application/json;charset=UTF-8',
+                                                                    'Accept': 'application/json, text/plain, */*',
+                                                                    'Referer': 'https://www.aisleplanner.com/app/project/60620/tools/guests/event/266429',
+                                                                    'Accept-Encoding': 'gzip, deflate, br',
+                                                                    'Accept-Language': 'en-CA,en-GB;q=0.9,en-US;q=0.8,en;q=0.7'
+                                                                },
+                                                                jar: cookiejar,
+                                                                json: true // Automatically stringifies the body to JSON
+                                                            };
+
+                                                            rp(addGuest1Options)
+                                                                .then(function (addGuest1Body) {
+                                                                    console.log("guest %j %j was added successfully!", guest1FirstName, guest1LastName);
+                                                                    //console.log("addGuest1Body: %j", addGuest1Body);
+                                                                    var guest1Id = addGuest1Body.guests[0].id;
+                                                                    //console.log("%j %j has user id: %j", guest1FirstName, guest1LastName, guest1Id);
+                                                                    // set attending rsvp status for bongsky
+                                                                    //console.log("setting rsvp status %s %s is: %j", guest1FirstName, guest1LastName, attending);
+                                                                    //var aisleplannerPrimaryAttending = (attending == "1") ? "attending" : "declined";
+                                                                    var updateGuest1AttendingOptions = {
+                                                                        method: 'PUT',
+                                                                        uri: 'https://www.aisleplanner.com/api/wedding/60620/events/266429/guests/' + guest1Id,
+                                                                        body: {
+                                                                            wedding_guest_id: guest1Id,
+                                                                            guest_list: 1,
+                                                                            responded_on: null,
+                                                                            meal_option_id: null,
+                                                                            meal_declined: false,
+                                                                            invitation_sent_on: null,
+                                                                            notes: "",
+                                                                            requires_transportation: false,
+                                                                            wedding_event_id: "266429",
+                                                                            attending_status: aisleplannerPrimaryAttending,
+                                                                            _effective_meal_option_id: null
+                                                                        },
+                                                                        headers: {
+                                                                            'Host': 'www.aisleplanner.com',
+                                                                            'Connection': 'keep-alive',
+                                                                            'Origin': 'https://www.aisleplanner.com',
+                                                                            'X-XSRF-TOKEN': token,
+                                                                            'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/64.0.3282.186 Safari/537.36',
+                                                                            'Content-Type': 'application/json;charset=UTF-8',
+                                                                            'Accept': 'application/json, text/plain, */*',
+                                                                            'X-Requested-With': 'XMLHttpRequest',
+                                                                            'Referer': 'https://www.aisleplanner.com/app/project/60620/tools/guests/event/266429',
+                                                                            'Accept-Encoding': 'gzip, deflate, br',
+                                                                            'Accept-Language': 'en-CA,en-GB;q=0.9,en-US;q=0.8,en;q=0.7'
+                                                                        },
+                                                                        jar: cookiejar,
+                                                                        json: true // Automatically stringifies the body to JSON
+                                                                    };
+
+                                                                    rp(updateGuest1AttendingOptions)
+                                                                        .then(function (updateGuest1AttendingBody) {
+                                                                            console.log("guest %j %j rsvp status was added successfully!", guest1FirstName, guest1LastName);
+                                                                            //console.log("updateGuest1AttendingBody: %j", updateGuest1AttendingBody);
+                                                                            // set attending status for Claudia Cole
+                                                                            //console.log("repeat setting rsvp status %j %j is: %j", guest1FirstName, guest1LastName, attending);
+                                                                            var updateGuest1AttendingRepeatOptions = {
+                                                                                method: 'PUT',
+                                                                                uri: 'https://www.aisleplanner.com/api/wedding/60620/events/266430/guests/' + guest1Id,
+                                                                                body: {
+                                                                                    wedding_guest_id: guest1Id,
+                                                                                    guest_list: 1,
+                                                                                    responded_on: null,
+                                                                                    meal_option_id: null,
+                                                                                    meal_declined: false,
+                                                                                    invitation_sent_on: null,
+                                                                                    notes: "",
+                                                                                    requires_transportation: false,
+                                                                                    wedding_event_id: "266430",
+                                                                                    attending_status: aisleplannerPrimaryAttending,
+                                                                                    _effective_meal_option_id: null
+                                                                                },
+                                                                                headers: {
+                                                                                    'Host': 'www.aisleplanner.com',
+                                                                                    'Connection': 'keep-alive',
+                                                                                    'Origin': 'https://www.aisleplanner.com',
+                                                                                    'X-XSRF-TOKEN': token,
+                                                                                    'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/64.0.3282.186 Safari/537.36',
+                                                                                    'Content-Type': 'application/json;charset=UTF-8',
+                                                                                    'Accept': 'application/json, text/plain, */*',
+                                                                                    'X-Requested-With': 'XMLHttpRequest',
+                                                                                    'Referer': 'https://www.aisleplanner.com/app/project/60620/tools/guests/event/266429',
+                                                                                    'Accept-Encoding': 'gzip, deflate, br',
+                                                                                    'Accept-Language': 'en-CA,en-GB;q=0.9,en-US;q=0.8,en;q=0.7'
+                                                                                },
+                                                                                jar: cookiejar,
+                                                                                json: true // Automatically stringifies the body to JSON
+                                                                            };
+
+                                                                            rp(updateGuest1AttendingRepeatOptions)
+                                                                                .then(function (updateGuest1AttendingRepeatBody) {
+                                                                                    console.log("guest %j %j rsvp status was added successfully again!", guest1FirstName, guest1LastName);
+                                                                                    //console.log("updateGuest1AttendingRepeatBody: %j", updateGuest1AttendingRepeatBody);
+                                                                                    //console.log("GREAT SUCCESS!");
+                                                                                    if(numGuests <= 1) {
+                                                                                        //console.log("no additional guests, signing out...");
+                                                                                        //signout
+                                                                                        console.log("signing out...");
+                                        
+                                                                                        var signoutOptions = {
+                                                                                            uri: 'https://www.aisleplanner.com/signout',
+                                                                                            headers: {
+                                                                                                'Host': 'www.aisleplanner.com',
+                                                                                                'Connection': 'keep-alive',
+                                                                                                'Upgrade-Insecure-Requests': '1',
+                                                                                                'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8',
+                                                                                                'X-XSRF-TOKEN': token,
+                                                                                                'X-Requested-With': 'XMLHttpRequest',
+                                                                                                'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/64.0.3282.186 Safari/537.36',
+                                                                                                'Referer': 'https://www.aisleplanner.com/app/project/60620/tools/guests/event/266429',
+                                                                                                'Accept-Encoding': 'gzip, deflate, br',
+                                                                                                'Accept-Language': 'en-CA,en-GB;q=0.9,en-US;q=0.8,en;q=0.7'
+                                                                                            },
+                                                                                            jar: cookiejar,
+                                                                                            json: true // Automatically stringifies the body to JSON
+                                                                                        };
+
+                                                                                        rp(signoutOptions)
+                                                                                            .then(function (signoutBody) {
+                                                                                                console.log("signout succeeded!");
+                                                                                                //END
+                                                                                            })
+                                                                                            .catch(function (signoutErr) {
+                                                                                                console.log("signout failed! error: %j", signoutErr);
+                                                                                            });
+                                                                                    } else {
+                                                                                        console.log("adding guest first name: %j last name: %j", guest2FirstName, guest2LastName);
+                                                                                        //add guest
+                                                                                        var addGuest2Options = {
+                                                                                            method: 'POST',
+                                                                                            uri: 'https://www.aisleplanner.com/api/wedding/60620/guest_groups?guests=true',
+                                                                                            body: {
+                                                                                                group: {},
+                                                                                                guests: [{"first_name":guest2FirstName,"last_name":guest2LastName,"is_primary_guest":true,"group_order":0}],"events":["266429","266430"]
+                                                                                            },
+                                                                                            headers: {
+                                                                                                'Host': 'www.aisleplanner.com',
+                                                                                                'Connection': 'keep-alive',
+                                                                                                'Origin': 'https://www.aisleplanner.com',
+                                                                                                'X-XSRF-TOKEN': token,
+                                                                                                //'X-AP-API-Version': todayDate,
+                                                                                                'X-Requested-With': 'XMLHttpRequest',
+                                                                                                'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/64.0.3282.186 Safari/537.36',
+                                                                                                'Content-Type': 'application/json;charset=UTF-8',
+                                                                                                'Accept': 'application/json, text/plain, */*',
+                                                                                                'Referer': 'https://www.aisleplanner.com/app/project/60620/tools/guests/event/266429',
+                                                                                                'Accept-Encoding': 'gzip, deflate, br',
+                                                                                                'Accept-Language': 'en-CA,en-GB;q=0.9,en-US;q=0.8,en;q=0.7'
+                                                                                            },
+                                                                                            jar: cookiejar,
+                                                                                            json: true // Automatically stringifies the body to JSON
+                                                                                        };
+
+                                                                                        rp(addGuest2Options)
+                                                                                            .then(function (addGuest2Body) {
+                                                                                                console.log("guest %j %j was added successfully!", guest2FirstName, guest2LastName);
+                                                                                                //console.log("addGuest2Body: %j", addGuest2Body);
+                                                                                                var guest2Id = addGuest2Body.guests[0].id;
+                                                                                                //console.log("%j %j has user id: %j", guest2FirstName, guest2LastName, guest2Id);
+                                                                                                // set attending rsvp status for bongsky
+                                                                                                //console.log("setting rsvp status %s %s is: %j", guest2FirstName, guest2LastName, attending);
+                                                                                                //var aisleplannerPrimaryAttending = (attending == "1") ? "attending" : "declined";
+                                                                                                var updateGuest2AttendingOptions = {
+                                                                                                    method: 'PUT',
+                                                                                                    uri: 'https://www.aisleplanner.com/api/wedding/60620/events/266429/guests/' + guest2Id,
+                                                                                                    body: {
+                                                                                                        wedding_guest_id: guest2Id,
+                                                                                                        guest_list: 1,
+                                                                                                        responded_on: null,
+                                                                                                        meal_option_id: null,
+                                                                                                        meal_declined: false,
+                                                                                                        invitation_sent_on: null,
+                                                                                                        notes: "",
+                                                                                                        requires_transportation: false,
+                                                                                                        wedding_event_id: "266429",
+                                                                                                        attending_status: aisleplannerPrimaryAttending,
+                                                                                                        _effective_meal_option_id: null
+                                                                                                    },
+                                                                                                    headers: {
+                                                                                                        'Host': 'www.aisleplanner.com',
+                                                                                                        'Connection': 'keep-alive',
+                                                                                                        'Origin': 'https://www.aisleplanner.com',
+                                                                                                        'X-XSRF-TOKEN': token,
+                                                                                                        'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/64.0.3282.186 Safari/537.36',
+                                                                                                        'Content-Type': 'application/json;charset=UTF-8',
+                                                                                                        'Accept': 'application/json, text/plain, */*',
+                                                                                                        'X-Requested-With': 'XMLHttpRequest',
+                                                                                                        'Referer': 'https://www.aisleplanner.com/app/project/60620/tools/guests/event/266429',
+                                                                                                        'Accept-Encoding': 'gzip, deflate, br',
+                                                                                                        'Accept-Language': 'en-CA,en-GB;q=0.9,en-US;q=0.8,en;q=0.7'
+                                                                                                    },
+                                                                                                    jar: cookiejar,
+                                                                                                    json: true // Automatically stringifies the body to JSON
+                                                                                                };
+
+                                                                                                rp(updateGuest2AttendingOptions)
+                                                                                                    .then(function (updateGuest2AttendingBody) {
+                                                                                                        console.log("guest %j %j rsvp status was added successfully!", guest2FirstName, guest2LastName);
+                                                                                                        //console.log("updateGuest2AttendingBody: %j", updateGuest2AttendingBody);
+                                                                                                        // set attending status for Claudia Cole
+                                                                                                        //console.log("repeat setting rsvp status %j %j is: %j", guest2FirstName, guest2LastName, attending);
+                                                                                                        var updateGuest2AttendingRepeatOptions = {
+                                                                                                            method: 'PUT',
+                                                                                                            uri: 'https://www.aisleplanner.com/api/wedding/60620/events/266430/guests/' + guest2Id,
+                                                                                                            body: {
+                                                                                                                wedding_guest_id: guest2Id,
+                                                                                                                guest_list: 1,
+                                                                                                                responded_on: null,
+                                                                                                                meal_option_id: null,
+                                                                                                                meal_declined: false,
+                                                                                                                invitation_sent_on: null,
+                                                                                                                notes: "",
+                                                                                                                requires_transportation: false,
+                                                                                                                wedding_event_id: "266430",
+                                                                                                                attending_status: aisleplannerPrimaryAttending,
+                                                                                                                _effective_meal_option_id: null
+                                                                                                            },
+                                                                                                            headers: {
+                                                                                                                'Host': 'www.aisleplanner.com',
+                                                                                                                'Connection': 'keep-alive',
+                                                                                                                'Origin': 'https://www.aisleplanner.com',
+                                                                                                                'X-XSRF-TOKEN': token,
+                                                                                                                'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/64.0.3282.186 Safari/537.36',
+                                                                                                                'Content-Type': 'application/json;charset=UTF-8',
+                                                                                                                'Accept': 'application/json, text/plain, */*',
+                                                                                                                'X-Requested-With': 'XMLHttpRequest',
+                                                                                                                'Referer': 'https://www.aisleplanner.com/app/project/60620/tools/guests/event/266429',
+                                                                                                                'Accept-Encoding': 'gzip, deflate, br',
+                                                                                                                'Accept-Language': 'en-CA,en-GB;q=0.9,en-US;q=0.8,en;q=0.7'
+                                                                                                            },
+                                                                                                            jar: cookiejar,
+                                                                                                            json: true // Automatically stringifies the body to JSON
+                                                                                                        };
+
+                                                                                                        rp(updateGuest2AttendingRepeatOptions)
+                                                                                                            .then(function (updateGuest2AttendingRepeatBody) {
+                                                                                                                console.log("guest %j %j rsvp status was added successfully again!", guest2FirstName, guest2LastName);
+                                                                                                                //console.log("updateGuest2AttendingRepeatBody: %j", updateGuest2AttendingRepeatBody);
+                                                                                                                //console.log("GREAT SUCCESS!");
+                                                                                                                if(numGuests <= 2) {
+                                                                                                                    //console.log("no additional guests, signing out...");
+                                                                                                                    //signout
+                                                                                                                    console.log("signing out...");
+                                                                    
+                                                                                                                    var signoutOptions = {
+                                                                                                                        uri: 'https://www.aisleplanner.com/signout',
+                                                                                                                        headers: {
+                                                                                                                            'Host': 'www.aisleplanner.com',
+                                                                                                                            'Connection': 'keep-alive',
+                                                                                                                            'Upgrade-Insecure-Requests': '1',
+                                                                                                                            'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8',
+                                                                                                                            'X-XSRF-TOKEN': token,
+                                                                                                                            'X-Requested-With': 'XMLHttpRequest',
+                                                                                                                            'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/64.0.3282.186 Safari/537.36',
+                                                                                                                            'Referer': 'https://www.aisleplanner.com/app/project/60620/tools/guests/event/266429',
+                                                                                                                            'Accept-Encoding': 'gzip, deflate, br',
+                                                                                                                            'Accept-Language': 'en-CA,en-GB;q=0.9,en-US;q=0.8,en;q=0.7'
+                                                                                                                        },
+                                                                                                                        jar: cookiejar,
+                                                                                                                        json: true // Automatically stringifies the body to JSON
+                                                                                                                    };
+
+                                                                                                                    rp(signoutOptions)
+                                                                                                                        .then(function (signoutBody) {
+                                                                                                                            console.log("signout succeeded!");
+                                                                                                                            //END
+                                                                                                                        })
+                                                                                                                        .catch(function (signoutErr) {
+                                                                                                                            console.log("signout failed! error: %j", signoutErr);
+                                                                                                                        });
+                                                                                                                } else {
+                                                                                                                    console.log("adding guest first name: %j last name: %j", guest3FirstName, guest3LastName);
+                                                                                                                    //add guest
+                                                                                                                    var addGuest3Options = {
+                                                                                                                        method: 'POST',
+                                                                                                                        uri: 'https://www.aisleplanner.com/api/wedding/60620/guest_groups?guests=true',
+                                                                                                                        body: {
+                                                                                                                            group: {},
+                                                                                                                            guests: [{"first_name":guest3FirstName,"last_name":guest3LastName,"is_primary_guest":true,"group_order":0}],"events":["266429","266430"]
+                                                                                                                        },
+                                                                                                                        headers: {
+                                                                                                                            'Host': 'www.aisleplanner.com',
+                                                                                                                            'Connection': 'keep-alive',
+                                                                                                                            'Origin': 'https://www.aisleplanner.com',
+                                                                                                                            'X-XSRF-TOKEN': token,
+                                                                                                                            //'X-AP-API-Version': todayDate,
+                                                                                                                            'X-Requested-With': 'XMLHttpRequest',
+                                                                                                                            'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/64.0.3282.186 Safari/537.36',
+                                                                                                                            'Content-Type': 'application/json;charset=UTF-8',
+                                                                                                                            'Accept': 'application/json, text/plain, */*',
+                                                                                                                            'Referer': 'https://www.aisleplanner.com/app/project/60620/tools/guests/event/266429',
+                                                                                                                            'Accept-Encoding': 'gzip, deflate, br',
+                                                                                                                            'Accept-Language': 'en-CA,en-GB;q=0.9,en-US;q=0.8,en;q=0.7'
+                                                                                                                        },
+                                                                                                                        jar: cookiejar,
+                                                                                                                        json: true // Automatically stringifies the body to JSON
+                                                                                                                    };
+
+                                                                                                                    rp(addGuest3Options)
+                                                                                                                        .then(function (addGuest3Body) {
+                                                                                                                            console.log("guest %j %j was added successfully!", guest3FirstName, guest3LastName);
+                                                                                                                            //console.log("addGuest3Body: %j", addGuest3Body);
+                                                                                                                            var guest3Id = addGuest3Body.guests[0].id;
+                                                                                                                            //console.log("%j %j has user id: %j", guest3FirstName, guest3LastName, guest3Id);
+                                                                                                                            // set attending rsvp status for bongsky
+                                                                                                                            //console.log("setting rsvp status %s %s is: %j", guest3FirstName, guest3LastName, attending);
+                                                                                                                            //var aisleplannerPrimaryAttending = (attending == "1") ? "attending" : "declined";
+                                                                                                                            var updateGuest3AttendingOptions = {
+                                                                                                                                method: 'PUT',
+                                                                                                                                uri: 'https://www.aisleplanner.com/api/wedding/60620/events/266429/guests/' + guest3Id,
+                                                                                                                                body: {
+                                                                                                                                    wedding_guest_id: guest3Id,
+                                                                                                                                    guest_list: 1,
+                                                                                                                                    responded_on: null,
+                                                                                                                                    meal_option_id: null,
+                                                                                                                                    meal_declined: false,
+                                                                                                                                    invitation_sent_on: null,
+                                                                                                                                    notes: "",
+                                                                                                                                    requires_transportation: false,
+                                                                                                                                    wedding_event_id: "266429",
+                                                                                                                                    attending_status: aisleplannerPrimaryAttending,
+                                                                                                                                    _effective_meal_option_id: null
+                                                                                                                                },
+                                                                                                                                headers: {
+                                                                                                                                    'Host': 'www.aisleplanner.com',
+                                                                                                                                    'Connection': 'keep-alive',
+                                                                                                                                    'Origin': 'https://www.aisleplanner.com',
+                                                                                                                                    'X-XSRF-TOKEN': token,
+                                                                                                                                    'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/64.0.3282.186 Safari/537.36',
+                                                                                                                                    'Content-Type': 'application/json;charset=UTF-8',
+                                                                                                                                    'Accept': 'application/json, text/plain, */*',
+                                                                                                                                    'X-Requested-With': 'XMLHttpRequest',
+                                                                                                                                    'Referer': 'https://www.aisleplanner.com/app/project/60620/tools/guests/event/266429',
+                                                                                                                                    'Accept-Encoding': 'gzip, deflate, br',
+                                                                                                                                    'Accept-Language': 'en-CA,en-GB;q=0.9,en-US;q=0.8,en;q=0.7'
+                                                                                                                                },
+                                                                                                                                jar: cookiejar,
+                                                                                                                                json: true // Automatically stringifies the body to JSON
+                                                                                                                            };
+
+                                                                                                                            rp(updateGuest3AttendingOptions)
+                                                                                                                                .then(function (updateGuest3AttendingBody) {
+                                                                                                                                    console.log("guest %j %j rsvp status was added successfully!", guest3FirstName, guest3LastName);
+                                                                                                                                    //console.log("updateGuest3AttendingBody: %j", updateGuest3AttendingBody);
+                                                                                                                                    // set attending status for Claudia Cole
+                                                                                                                                    //console.log("repeat setting rsvp status %j %j is: %j", guest3FirstName, guest3LastName, attending);
+                                                                                                                                    var updateGuest3AttendingRepeatOptions = {
+                                                                                                                                        method: 'PUT',
+                                                                                                                                        uri: 'https://www.aisleplanner.com/api/wedding/60620/events/266430/guests/' + guest3Id,
+                                                                                                                                        body: {
+                                                                                                                                            wedding_guest_id: guest3Id,
+                                                                                                                                            guest_list: 1,
+                                                                                                                                            responded_on: null,
+                                                                                                                                            meal_option_id: null,
+                                                                                                                                            meal_declined: false,
+                                                                                                                                            invitation_sent_on: null,
+                                                                                                                                            notes: "",
+                                                                                                                                            requires_transportation: false,
+                                                                                                                                            wedding_event_id: "266430",
+                                                                                                                                            attending_status: aisleplannerPrimaryAttending,
+                                                                                                                                            _effective_meal_option_id: null
+                                                                                                                                        },
+                                                                                                                                        headers: {
+                                                                                                                                            'Host': 'www.aisleplanner.com',
+                                                                                                                                            'Connection': 'keep-alive',
+                                                                                                                                            'Origin': 'https://www.aisleplanner.com',
+                                                                                                                                            'X-XSRF-TOKEN': token,
+                                                                                                                                            'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/64.0.3282.186 Safari/537.36',
+                                                                                                                                            'Content-Type': 'application/json;charset=UTF-8',
+                                                                                                                                            'Accept': 'application/json, text/plain, */*',
+                                                                                                                                            'X-Requested-With': 'XMLHttpRequest',
+                                                                                                                                            'Referer': 'https://www.aisleplanner.com/app/project/60620/tools/guests/event/266429',
+                                                                                                                                            'Accept-Encoding': 'gzip, deflate, br',
+                                                                                                                                            'Accept-Language': 'en-CA,en-GB;q=0.9,en-US;q=0.8,en;q=0.7'
+                                                                                                                                        },
+                                                                                                                                        jar: cookiejar,
+                                                                                                                                        json: true // Automatically stringifies the body to JSON
+                                                                                                                                    };
+
+                                                                                                                                    rp(updateGuest3AttendingRepeatOptions)
+                                                                                                                                        .then(function (updateGuest3AttendingRepeatBody) {
+                                                                                                                                            console.log("guest %j %j rsvp status was added successfully again!", guest3FirstName, guest3LastName);
+                                                                                                                                            //console.log("updateGuest3AttendingRepeatBody: %j", updateGuest3AttendingRepeatBody);
+                                                                                                                                            //console.log("GREAT SUCCESS!");
+                                                                                                                                            if(numGuests <= 3) {
+                                                                                                                                                //console.log("no additional guests, signing out...");
+                                                                                                                                                //signout
+                                                                                                                                                console.log("signing out...");
+                                                                                                
+                                                                                                                                                var signoutOptions = {
+                                                                                                                                                    uri: 'https://www.aisleplanner.com/signout',
+                                                                                                                                                    headers: {
+                                                                                                                                                        'Host': 'www.aisleplanner.com',
+                                                                                                                                                        'Connection': 'keep-alive',
+                                                                                                                                                        'Upgrade-Insecure-Requests': '1',
+                                                                                                                                                        'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8',
+                                                                                                                                                        'X-XSRF-TOKEN': token,
+                                                                                                                                                        'X-Requested-With': 'XMLHttpRequest',
+                                                                                                                                                        'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/64.0.3282.186 Safari/537.36',
+                                                                                                                                                        'Referer': 'https://www.aisleplanner.com/app/project/60620/tools/guests/event/266429',
+                                                                                                                                                        'Accept-Encoding': 'gzip, deflate, br',
+                                                                                                                                                        'Accept-Language': 'en-CA,en-GB;q=0.9,en-US;q=0.8,en;q=0.7'
+                                                                                                                                                    },
+                                                                                                                                                    jar: cookiejar,
+                                                                                                                                                    json: true // Automatically stringifies the body to JSON
+                                                                                                                                                };
+
+                                                                                                                                                rp(signoutOptions)
+                                                                                                                                                    .then(function (signoutBody) {
+                                                                                                                                                        console.log("signout succeeded!");
+                                                                                                                                                        //END
+                                                                                                                                                    })
+                                                                                                                                                    .catch(function (signoutErr) {
+                                                                                                                                                        console.log("signout failed! error: %j", signoutErr);
+                                                                                                                                                    });
+                                                                                                                                            } else {
+                                                                                                                                                console.log("adding guest first name: %j last name: %j", guest4FirstName, guest4LastName);
+                                                                                                                                                //add guest
+                                                                                                                                                var addGuest4Options = {
+                                                                                                                                                    method: 'POST',
+                                                                                                                                                    uri: 'https://www.aisleplanner.com/api/wedding/60620/guest_groups?guests=true',
+                                                                                                                                                    body: {
+                                                                                                                                                        group: {},
+                                                                                                                                                        guests: [{"first_name":guest4FirstName,"last_name":guest4LastName,"is_primary_guest":true,"group_order":0}],"events":["266429","266430"]
+                                                                                                                                                    },
+                                                                                                                                                    headers: {
+                                                                                                                                                        'Host': 'www.aisleplanner.com',
+                                                                                                                                                        'Connection': 'keep-alive',
+                                                                                                                                                        'Origin': 'https://www.aisleplanner.com',
+                                                                                                                                                        'X-XSRF-TOKEN': token,
+                                                                                                                                                        //'X-AP-API-Version': todayDate,
+                                                                                                                                                        'X-Requested-With': 'XMLHttpRequest',
+                                                                                                                                                        'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/64.0.3282.186 Safari/537.36',
+                                                                                                                                                        'Content-Type': 'application/json;charset=UTF-8',
+                                                                                                                                                        'Accept': 'application/json, text/plain, */*',
+                                                                                                                                                        'Referer': 'https://www.aisleplanner.com/app/project/60620/tools/guests/event/266429',
+                                                                                                                                                        'Accept-Encoding': 'gzip, deflate, br',
+                                                                                                                                                        'Accept-Language': 'en-CA,en-GB;q=0.9,en-US;q=0.8,en;q=0.7'
+                                                                                                                                                    },
+                                                                                                                                                    jar: cookiejar,
+                                                                                                                                                    json: true // Automatically stringifies the body to JSON
+                                                                                                                                                };
+
+                                                                                                                                                rp(addGuest4Options)
+                                                                                                                                                    .then(function (addGuest4Body) {
+                                                                                                                                                        console.log("guest %j %j was added successfully!", guest4FirstName, guest4LastName);
+                                                                                                                                                        //console.log("addGuest4Body: %j", addGuest4Body);
+                                                                                                                                                        var guest4Id = addGuest4Body.guests[0].id;
+                                                                                                                                                        //console.log("%j %j has user id: %j", guest4FirstName, guest4LastName, guest4Id);
+                                                                                                                                                        // set attending rsvp status for bongsky
+                                                                                                                                                        //console.log("setting rsvp status %s %s is: %j", guest4FirstName, guest4LastName, attending);
+                                                                                                                                                        //var aisleplannerPrimaryAttending = (attending == "1") ? "attending" : "declined";
+                                                                                                                                                        var updateGuest4AttendingOptions = {
+                                                                                                                                                            method: 'PUT',
+                                                                                                                                                            uri: 'https://www.aisleplanner.com/api/wedding/60620/events/266429/guests/' + guest4Id,
+                                                                                                                                                            body: {
+                                                                                                                                                                wedding_guest_id: guest4Id,
+                                                                                                                                                                guest_list: 1,
+                                                                                                                                                                responded_on: null,
+                                                                                                                                                                meal_option_id: null,
+                                                                                                                                                                meal_declined: false,
+                                                                                                                                                                invitation_sent_on: null,
+                                                                                                                                                                notes: "",
+                                                                                                                                                                requires_transportation: false,
+                                                                                                                                                                wedding_event_id: "266429",
+                                                                                                                                                                attending_status: aisleplannerPrimaryAttending,
+                                                                                                                                                                _effective_meal_option_id: null
+                                                                                                                                                            },
+                                                                                                                                                            headers: {
+                                                                                                                                                                'Host': 'www.aisleplanner.com',
+                                                                                                                                                                'Connection': 'keep-alive',
+                                                                                                                                                                'Origin': 'https://www.aisleplanner.com',
+                                                                                                                                                                'X-XSRF-TOKEN': token,
+                                                                                                                                                                'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/64.0.3282.186 Safari/537.36',
+                                                                                                                                                                'Content-Type': 'application/json;charset=UTF-8',
+                                                                                                                                                                'Accept': 'application/json, text/plain, */*',
+                                                                                                                                                                'X-Requested-With': 'XMLHttpRequest',
+                                                                                                                                                                'Referer': 'https://www.aisleplanner.com/app/project/60620/tools/guests/event/266429',
+                                                                                                                                                                'Accept-Encoding': 'gzip, deflate, br',
+                                                                                                                                                                'Accept-Language': 'en-CA,en-GB;q=0.9,en-US;q=0.8,en;q=0.7'
+                                                                                                                                                            },
+                                                                                                                                                            jar: cookiejar,
+                                                                                                                                                            json: true // Automatically stringifies the body to JSON
+                                                                                                                                                        };
+
+                                                                                                                                                        rp(updateGuest4AttendingOptions)
+                                                                                                                                                            .then(function (updateGuest4AttendingBody) {
+                                                                                                                                                                console.log("guest %j %j rsvp status was added successfully!", guest4FirstName, guest4LastName);
+                                                                                                                                                                //console.log("updateGuest4AttendingBody: %j", updateGuest4AttendingBody);
+                                                                                                                                                                // set attending status for Claudia Cole
+                                                                                                                                                                //console.log("repeat setting rsvp status %j %j is: %j", guest4FirstName, guest4LastName, attending);
+                                                                                                                                                                var updateGuest4AttendingRepeatOptions = {
+                                                                                                                                                                    method: 'PUT',
+                                                                                                                                                                    uri: 'https://www.aisleplanner.com/api/wedding/60620/events/266430/guests/' + guest4Id,
+                                                                                                                                                                    body: {
+                                                                                                                                                                        wedding_guest_id: guest4Id,
+                                                                                                                                                                        guest_list: 1,
+                                                                                                                                                                        responded_on: null,
+                                                                                                                                                                        meal_option_id: null,
+                                                                                                                                                                        meal_declined: false,
+                                                                                                                                                                        invitation_sent_on: null,
+                                                                                                                                                                        notes: "",
+                                                                                                                                                                        requires_transportation: false,
+                                                                                                                                                                        wedding_event_id: "266430",
+                                                                                                                                                                        attending_status: aisleplannerPrimaryAttending,
+                                                                                                                                                                        _effective_meal_option_id: null
+                                                                                                                                                                    },
+                                                                                                                                                                    headers: {
+                                                                                                                                                                        'Host': 'www.aisleplanner.com',
+                                                                                                                                                                        'Connection': 'keep-alive',
+                                                                                                                                                                        'Origin': 'https://www.aisleplanner.com',
+                                                                                                                                                                        'X-XSRF-TOKEN': token,
+                                                                                                                                                                        'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/64.0.3282.186 Safari/537.36',
+                                                                                                                                                                        'Content-Type': 'application/json;charset=UTF-8',
+                                                                                                                                                                        'Accept': 'application/json, text/plain, */*',
+                                                                                                                                                                        'X-Requested-With': 'XMLHttpRequest',
+                                                                                                                                                                        'Referer': 'https://www.aisleplanner.com/app/project/60620/tools/guests/event/266429',
+                                                                                                                                                                        'Accept-Encoding': 'gzip, deflate, br',
+                                                                                                                                                                        'Accept-Language': 'en-CA,en-GB;q=0.9,en-US;q=0.8,en;q=0.7'
+                                                                                                                                                                    },
+                                                                                                                                                                    jar: cookiejar,
+                                                                                                                                                                    json: true // Automatically stringifies the body to JSON
+                                                                                                                                                                };
+
+                                                                                                                                                                rp(updateGuest4AttendingRepeatOptions)
+                                                                                                                                                                    .then(function (updateGuest4AttendingRepeatBody) {
+                                                                                                                                                                        console.log("guest %j %j rsvp status was added successfully again!", guest4FirstName, guest4LastName);
+                                                                                                                                                                        //console.log("updateGuest4AttendingRepeatBody: %j", updateGuest4AttendingRepeatBody);
+                                                                                                                                                                        //console.log("GREAT SUCCESS!");
+                                                                                                                                                                        
+                                                                                                                                                                        //console.log("not supporting additional guests, signing out...");
+                                                                                                                                                                        //signout
+                                                                                                                                                                        console.log("signing out...");
+                                                                                                                        
+                                                                                                                                                                        var signoutOptions = {
+                                                                                                                                                                            uri: 'https://www.aisleplanner.com/signout',
+                                                                                                                                                                            headers: {
+                                                                                                                                                                                'Host': 'www.aisleplanner.com',
+                                                                                                                                                                                'Connection': 'keep-alive',
+                                                                                                                                                                                'Upgrade-Insecure-Requests': '1',
+                                                                                                                                                                                'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8',
+                                                                                                                                                                                'X-XSRF-TOKEN': token,
+                                                                                                                                                                                'X-Requested-With': 'XMLHttpRequest',
+                                                                                                                                                                                'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/64.0.3282.186 Safari/537.36',
+                                                                                                                                                                                'Referer': 'https://www.aisleplanner.com/app/project/60620/tools/guests/event/266429',
+                                                                                                                                                                                'Accept-Encoding': 'gzip, deflate, br',
+                                                                                                                                                                                'Accept-Language': 'en-CA,en-GB;q=0.9,en-US;q=0.8,en;q=0.7'
+                                                                                                                                                                            },
+                                                                                                                                                                            jar: cookiejar,
+                                                                                                                                                                            json: true // Automatically stringifies the body to JSON
+                                                                                                                                                                        };
+
+                                                                                                                                                                        rp(signoutOptions)
+                                                                                                                                                                            .then(function (signoutBody) {
+                                                                                                                                                                                console.log("signout succeeded!");
+                                                                                                                                                                                //END
+                                                                                                                                                                            })
+                                                                                                                                                                            .catch(function (signoutErr) {
+                                                                                                                                                                                console.log("signout failed! error: %j", signoutErr);
+                                                                                                                                                                            });
+                                                                                                                                                                    });//updateGuest4AttendingRepeatOptions.then
+                                                                                                                                                            });
+                                                                                                                                                    }); 
+                                                                                                                                            }         
+                                                                                                                                        });
+                                                                                                                                });
+                                                                                                                        });
+                                                                                                                }
+                                                                                                            });
+                                                                                                    });
+                                                                                            });    
+                                                                                    }
+                                                                                });
+                                                                        });
+                                                                });
+                                                        }
+                                                                                
+                                                    //don't care if guest fails since primary already passed
                                                     })
                                                     .catch(function (updatePrimaryAttendingRepeatErr) {
                                                         console.log("updatePrimaryAttendingRepeatErr: %j", updatePrimaryAttendingRepeatErr);
@@ -604,6 +1216,7 @@ exports.handler = (event, context, callback) => {
                 // Updating an existing Name with other values
                 // Only interested in "attending" changing or "guests" changing
                 console.log("MODIFY EXISTING AISLEPLANNER");
+                /*
                 if (typeof fullName !== 'undefined') {
                     console.log("new fullName: %j, firstName: %j, lastName: %j", fullName, firstName, lastName);
                 }
@@ -641,7 +1254,7 @@ exports.handler = (event, context, callback) => {
                     console.log("ATTENDING IS DIFFERENT WRITE TO AISLEPLANNER");
                     //need to go through all user + guests and update aisle planner
                 }
-                
+                */
                 break;
             case "REMOVE":
                 // Removing an existing Name
